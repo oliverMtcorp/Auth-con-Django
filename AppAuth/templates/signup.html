@@ -1,0 +1,64 @@
+{% extends 'layout/base.html' %} {% block content %}
+
+<div class="container">
+    <h1>regitrase</h1>
+
+    {{error}}
+
+    <form action="/signup/" method="POST">
+        {% csrf_token %} {{form.as_p}}
+        <button class="btn btn-primary">regitrase</button>
+    </form>
+    <body>
+        <h1>con Google</h1>
+        <button onclick="loginGoogle()">registra con Google</button>
+    </body>
+    <body>
+        <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
+        <script>
+            const firebaseApp = firebase.initializeApp({
+                apiKey: "AIzaSyBeXbk4Z6mlnUn432feD4jA0r5ubKgvZE4",
+                authDomain: "crud-79455.firebaseapp.com",
+                projectId: "crud-79455",
+                storageBucket: "crud-79455.appspot.com",
+                messagingSenderId: "262158898961",
+                appId: "1:262158898961:web:59275ac06bbc1a29059eb0",
+                measurementId: "G-LD10J195T5"});
+            const db = getFirestore(app);
+            // Initialize Firebase
+            //const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+            const auth = getAuth(app);
+            
+            
+            function loginGoogle() {
+                var provider = new firebase.auth.GoogleAuthProvider();
+                firebase.auth()
+                    .signInWithPopup(provider)
+                    .then((result) => {
+                        /** @type {firebase.auth.OAuthCredential} */
+                        var credential = result.credential;
+                        // This gives you a Google Access Token. You can use it to access the Google API.
+                        var token = credential.accessToken;
+                        // The signed-in user info.
+                        var user = result.user;
+                        // ...
+                        console.log(user);
+                    }).catch((error) => {
+                        // Handle Errors here.
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        // The email of the user's account used.
+                        var email = error.email;
+                        // The firebase.auth.AuthCredential type that was used.
+                        var credential = error.credential;
+                        // ...
+                        console.log(error);
+                    });
+            }
+        </script>
+    </body>
+</div>
+{% endblock %}
